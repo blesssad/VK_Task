@@ -1,11 +1,12 @@
 package com.example.vk_task.Services.EntityServices;
 
 import com.example.vk_task.Entities.User;
+import com.example.vk_task.Interfaces.EntityServiceInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class UserService {
+public class UserService implements EntityServiceInterface<User> {
     private final String url;
     private final RestTemplate restTemplate;
 

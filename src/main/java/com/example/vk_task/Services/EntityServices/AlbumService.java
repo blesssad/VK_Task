@@ -1,11 +1,12 @@
 package com.example.vk_task.Services.EntityServices;
 
 import com.example.vk_task.Entities.Album;
+import com.example.vk_task.Interfaces.EntityServiceInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class AlbumService {
+public class AlbumService implements EntityServiceInterface<Album> {
     private final String url;
     private final RestTemplate restTemplate;
 
