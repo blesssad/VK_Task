@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Album {
-    private int userId;
-    private int id;
+    private Long userId;
+    private Long id;
     private String title;
 }

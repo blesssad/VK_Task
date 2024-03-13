@@ -28,7 +28,7 @@ public class AuthUserService {
             AuthUser admin = new AuthUser();
             admin.setName("admin");
             admin.setPassword(passwordEncoder.encode("admin"));
-            admin.setRoles("ROLE_ADMIN, ROLE_POSTS, ROLE_ALBUMS, ROLE_USERS");
+            admin.setRoles("ROLE_ADMIN");
             repository.save(admin);
         }
 
