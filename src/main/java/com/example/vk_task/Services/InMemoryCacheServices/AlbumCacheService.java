@@ -21,6 +21,15 @@ public class AlbumCacheService implements CacheServiceInterface<Album> {
     }
 
     @Override
+    public boolean post(Album value) {
+        if (contains(value.getId()))
+            return false;
+
+        cache.put(value.getId(), value);
+        return true;
+    }
+
+    @Override
     public Album get(long id) {
         return cache.getOrDefault(id, null);
     }

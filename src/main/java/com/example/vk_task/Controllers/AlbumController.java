@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/albums")
-@PreAuthorize("hasAuthority('ROLE_ALBUMS')")
+@PreAuthorize("hasAuthority('ROLE_ALBUMS') or hasAuthority('ROLE_ADMIN')")
 public class AlbumController {
     private final String controllerMapping;
     private final AlbumService albumService;
@@ -39,12 +39,13 @@ public class AlbumController {
 
     @PostMapping("")
     public String createAlbum(@RequestBody Album album) {
-        auditService.logMessage("YES", controllerMapping, "POST");
-
-        cacheService.put(album.getId(), album);
-        albumService.post(album);
-
-        return "Nice";
+        if (cacheService.post(album)) {
+            auditService.logMessage("YES", controllerMapping, "POST");
+            return "Nice";
+        } else {
+            auditService.logMessage("NO", controllerMapping, "POST");
+            return "Entity already exist!";
+        }
     }
 
     @PutMapping("/{albumId}")

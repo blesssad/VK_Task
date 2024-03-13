@@ -21,6 +21,15 @@ public class PostCacheService implements CacheServiceInterface<Post> {
     }
 
     @Override
+    public boolean post(Post value) {
+        if (contains(value.getId()))
+            return false;
+
+        cache.put(value.getId(), value);
+        return true;
+    }
+
+    @Override
     public Post get(long id) {
         return cache.getOrDefault(id, null);
     }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/posts")
-@PreAuthorize("hasAuthority('ROLE_POSTS')")
+@PreAuthorize("hasAuthority('ROLE_POSTS') or hasAuthority('ROLE_ADMIN')")
 public class PostController {
     private final String controllerMapping;
     private final PostService postService;
@@ -39,12 +39,13 @@ public class PostController {
 
     @PostMapping("")
     public String createPost(@RequestBody Post post) {
-        auditService.logMessage("YES", controllerMapping, "POST");
-
-        cacheService.put(post.getId(), post);
-        postService.post(post);
-
-        return "Nice";
+        if (cacheService.post(post)) {
+            auditService.logMessage("YES", controllerMapping, "POST");
+            return "Nice";
+        } else {
+            auditService.logMessage("NO", controllerMapping, "POST");
+            return "Entity already exist!";
+        }
     }
 
     @PutMapping("/{postId}")

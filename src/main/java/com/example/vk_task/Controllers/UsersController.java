@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
-@PreAuthorize("hasAuthority('ROLE_USERS')")
+@PreAuthorize("hasAuthority('ROLE_USERS') or hasAuthority('ROLE_ADMIN')")
 public class UsersController {
     private final String controllerMapping;
     private final UserService userService;
@@ -39,12 +39,13 @@ public class UsersController {
 
     @PostMapping("")
     public String createUser(@RequestBody User user) {
-        auditService.logMessage("YES", controllerMapping, "POST");
-
-        cacheService.put(user.getId(), user);
-        userService.post(user);
-
-        return "Nice";
+        if (cacheService.post(user)) {
+            auditService.logMessage("YES", controllerMapping, "POST");
+            return "Nice";
+        } else {
+            auditService.logMessage("NO", controllerMapping, "POST");
+            return "Entity already exist!";
+        }
     }
 
     @PutMapping("/{userId}")

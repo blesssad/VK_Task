@@ -21,6 +21,15 @@ public class UserCacheService implements CacheServiceInterface<User> {
     }
 
     @Override
+    public boolean post(User value) {
+        if (contains(value.getId()))
+            return false;
+
+        cache.put(value.getId(), value);
+        return true;
+    }
+
+    @Override
     public User get(long id) {
         return cache.getOrDefault(id, null);
     }
